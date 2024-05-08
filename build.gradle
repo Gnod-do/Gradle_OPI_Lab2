@@ -32,6 +32,7 @@ dependencies {
 	implementation group: 'org.springframework.security', name: 'spring-security-web', version: '5.7.5'
 	implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.7.5'
 	implementation group: 'org.springframework.security', name: 'spring-security-config', version: '5.7.5'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: '3.2.2'
 	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
