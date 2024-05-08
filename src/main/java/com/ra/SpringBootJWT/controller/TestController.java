@@ -4,7 +4,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ra.model.Credentials.PointsCredentials;
+import com.ra.SpringBootJWT.model.Credentials.PointsCredentials;
 
 @RestController
 @CrossOrigin(origins = "*")

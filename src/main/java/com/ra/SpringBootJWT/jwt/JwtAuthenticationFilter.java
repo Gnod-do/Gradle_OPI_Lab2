@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ra.security.CustomUserDetailsService;
+import com.ra.SpringBootJWT.security.CustomUserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 
 import javax.servlet.FilterChain;
@@ -52,5 +52,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
-
 }
