@@ -1,5 +1,6 @@
 package com.ra.SpringBootJWT.model.entity;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -31,4 +32,7 @@ public class Points {
     @JoinColumn(name = "UserId")
     private Users user;
 
+    public Points() {
+
+    }
 }

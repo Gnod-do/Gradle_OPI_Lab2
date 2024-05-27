@@ -57,6 +57,10 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'com.h2database:h2:2.2.224'
+
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 
 dependencyManagement {
@@ -87,30 +91,24 @@ tasks.named('bootJar') {
 	archiveFileName = 'BackendApplication.jar'
 }
 
-//Dang co van de can sua
-tasks.register('buildProject', Jar) {
+tasks.register('buildProject') {
+	group = 'custom'
 	description = 'Compilation of project source codes and packaging them into an executable jar archive.'
-	group = 'Custom'
-	dependsOn 'bootJar'
-
-//	archiveFileName = 'BackendApplication.jar'
-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-	from {
-		configurations.runtimeClasspath.collect {it.isDirectory() ? it : zipTree(it)}
-	}
-	from sourceSets.main.output
-	manifest {
-		attributes(
-				'Main-Class': 'com.ra.SpringBootJWT.SpringBootJwtApplication'
-		)
+	dependsOn tasks.named('compileProject'), tasks.named('bootJar')
+	doLast {
+		println "The project is compiled and packaged into an executable JAR file."
 	}
 }
+
 
 tasks.register('cleanProject',Delete) {
 	description = 'Deleting the compiled project classes and all temporary files (if any).'
 	group = 'custom'
 	delete 'build'
 }
+
+
+
 
 
 

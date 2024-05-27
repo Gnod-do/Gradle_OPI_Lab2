@@ -2,6 +2,7 @@ package com.ra.SpringBootJWT.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Data;
 import com.ra.SpringBootJWT.model.entity.Roles;
 
@@ -14,6 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "Users")
 @Data
+//@Builder
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
