@@ -100,12 +100,63 @@ tasks.register('buildProject') {
 	}
 }
 
+tasks.register('testProject') {
+	group = 'custom'
+	description = 'Running junit tests of the project'
+	dependsOn tasks.named('test')
+	doLast {
+		println "The project has run through junit tests."
+	}
+}
+
 
 tasks.register('cleanProject',Delete) {
 	description = 'Deleting the compiled project classes and all temporary files (if any).'
 	group = 'custom'
 	delete 'build'
 }
+
+
+tasks.register('music') {
+	description = 'Play music when build is complete (build target)'
+	group = 'custom'
+	doLast {
+		exec {
+			commandLine 'cmd', '/c', 'powershell -Command "(New-Object Media.SoundPlayer \'C:\\Users\\anhdo\\OneDrive - ITMO UNIVERSITY\\SpringBoot\\SpringBootJWT\\SpringBootJWT\\music\\we-don_t-talk-anymore.wav\').PlaySync();"'
+		}
+	}
+}
+
+
+tasks.buildProject {
+	finalizedBy tasks.music
+}
+
+tasks.register('altProject') {
+	description = 'Creates an alternative version of the program with changed variable and class names.'
+	group = 'custom'
+	doLast {
+		def srcDir = file("${projectDir}/src/main/java")
+		def altDir = file("${buildDir}/altDir")
+		delete altDir
+		altDir.mkdirs()
+
+		copy {
+			from srcDir
+			into altDir
+			include '**/*.java'
+			filter { line ->
+				line.replaceAll('OldClass', 'NewClass')
+						.replaceAll('OldVariable', 'NewVariable')
+			}
+		}
+
+		println "Altushki copied and replaced in ${altDir}"
+	}
+}
+
+
+
 
 
 
