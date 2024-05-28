@@ -32,7 +32,4 @@ public class Points {
     @JoinColumn(name = "UserId")
     private Users user;
 
-    public Points() {
-
-    }
 }
