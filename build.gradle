@@ -80,7 +80,7 @@ tasks.named('processResources') {
 }
 
 
-tasks.register('compileProject', JavaCompile) {
+tasks.register('compileCustom', JavaCompile) {
 	description = 'Compilation of project source codes.'
 	group = 'Custom'
 	dependsOn 'classes'
@@ -91,16 +91,16 @@ tasks.named('bootJar') {
 	archiveFileName = 'BackendApplication.jar'
 }
 
-tasks.register('buildProject') {
+tasks.register('buildCustom') {
 	group = 'custom'
 	description = 'Compilation of project source codes and packaging them into an executable jar archive.'
-	dependsOn tasks.named('compileProject'), tasks.named('bootJar')
+	dependsOn tasks.named('compileCustom'), tasks.named('bootJar')
 	doLast {
 		println "The project is compiled and packaged into an executable JAR file."
 	}
 }
 
-tasks.register('testProject') {
+tasks.register('testCustom') {
 	group = 'custom'
 	description = 'Running junit tests of the project'
 	dependsOn tasks.named('test')
@@ -110,14 +110,14 @@ tasks.register('testProject') {
 }
 
 
-tasks.register('cleanProject',Delete) {
+tasks.register('cleanCustom',Delete) {
 	description = 'Deleting the compiled project classes and all temporary files (if any).'
 	group = 'custom'
 	delete 'build'
 }
 
 
-tasks.register('music') {
+tasks.register('musicCustom') {
 	description = 'Play music when build is complete (build target)'
 	group = 'custom'
 	doLast {
@@ -128,11 +128,11 @@ tasks.register('music') {
 }
 
 
-tasks.buildProject {
-	finalizedBy tasks.music
-}
+//tasks.buildCustom {
+//	finalizedBy tasks.musicCustom
+//}
 
-tasks.register('altProject') {
+tasks.register('altCustom') {
 	description = 'Creates an alternative version of the program with changed variable and class names.'
 	group = 'custom'
 	doLast {
@@ -154,6 +154,73 @@ tasks.register('altProject') {
 		println "Altushki copied and replaced in ${altDir}"
 	}
 }
+
+tasks.register('scpCustom') {
+	group = 'custom'
+	description = 'Moving the assembled project via SCP to the selected server upon completion of the build'
+	dependsOn 'buildCustom'
+	doLast{
+		def remoteHost = 'se.ifmo.ru'
+		def remoteUser = 's345132'
+		def remoteDir = '~/opi'
+		def jarFile = 'build/libs/BackendApplication.jar'
+		def remotePort ='2222'
+		def password = 'ZDBZ"&"9739'
+
+		exec {
+			commandLine 'wsl', 'sshpass', '-p', password, 'scp', '-P', remotePort, jarFile, "${remoteUser}@${remoteHost}:${remoteDir}"
+		}
+
+		println "The assembled project has been moved to the server ${remoteHost} to the directory ${remoteDir}."
+	}
+}
+
+//tasks.register('history') {
+//	description = 'Rollback to previous versions until a successful build is achieved.'
+//	group = 'custom'
+//
+//	doLast {
+//		def initialCommit = 'HEAD'
+//		def success = false
+//
+//		while (!success) {
+//			def currentCommit = new ByteArrayOutputStream()
+//			exec {
+//				commandLine 'git', 'rev-parse', 'HEAD'
+//				standardOutput = currentCommit
+//			}
+//			currentCommit = currentCommit.toString().trim()
+//
+//			if (currentCommit == initialCommit) {
+//				println "Reached the initial commit, no working version found."
+//				break
+//			}
+//
+//			try {
+//				exec {
+//					commandLine './gradlew', 'cleanProject', 'buildProject'
+//				}
+//				success = true
+//				println "Project built successfully."
+//
+//				// Create a diff file for changes between working and next commit
+//				def diffOutput = new ByteArrayOutputStream()
+//				exec {
+//					commandLine 'git', 'diff', 'HEAD', 'HEAD~1'
+//					standardOutput = diffOutput
+//				}
+//				new File('last_working_diff.patch').text = diffOutput.toString()
+//				println "Created diff file for changes."
+//			} catch (Exception e) {
+//				println "Build failed, rolling back to previous commit."
+//				exec {
+//					commandLine 'git', 'checkout', 'HEAD~1'
+//				}
+//			}
+//		}
+//	}
+//}
+
 
 
 
